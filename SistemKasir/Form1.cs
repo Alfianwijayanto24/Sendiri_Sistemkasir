@@ -45,7 +45,7 @@ namespace SistemKasir
 
         private void label1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         // BAGIAN E: Tampilkan Data menggunakan SqlDataReader
@@ -67,6 +67,18 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
             }
         }
-
+        // BAGIAN D: ExecuteScalar untuk Hitung Total Record
+        private void HitungTotal()
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Barang", conn);
+                int jumlah = (int)cmd.ExecuteScalar();
+                lblTotalRecord.Text = "Total Record: " + jumlah.ToString();
+                conn.Close();
+            }
+            catch { if (conn.State == ConnectionState.Open) conn.Close(); }
+        }
     }
 }
