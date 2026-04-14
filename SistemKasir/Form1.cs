@@ -22,5 +22,25 @@ namespace SistemKasir
             InitializeComponent();
         }
 
+        // BAGIAN B: Koneksi Database saat Form Load
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                conn.Open();
+                lblStatus.Text = "Status: Terhubung";
+                lblStatus.ForeColor = Color.Green;
+                conn.Close();
+
+                TampilkanData();
+                HitungTotal();
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = "Status: Putus";
+                lblStatus.ForeColor = Color.Red;
+                MessageBox.Show("Koneksi Gagal: " + ex.Message);
+            }
+        }
     }
 }
