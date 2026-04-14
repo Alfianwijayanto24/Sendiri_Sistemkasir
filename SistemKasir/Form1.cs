@@ -80,5 +80,15 @@ namespace SistemKasir
             }
             catch { if (conn.State == ConnectionState.Open) conn.Close(); }
         }
+
+
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            if (txtKode.Text == "" || txtNama.Text == "")
+            {
+                MessageBox.Show("Kode dan Nama tidak boleh kosong!", "Validasi");
+                return;
+            }
+        }
     }
 }
