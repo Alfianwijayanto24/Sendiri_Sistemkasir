@@ -220,8 +220,31 @@ namespace SistemKasir
                 // Query untuk mencari data berdasarkan NamaBarang
                 string query = "SELECT * FROM Barang WHERE NamaBarang LIKE @cari";
                 SqlCommand cmd = new SqlCommand(query, conn);
+
+                // Menambahkan simbol % agar mencari karakter di awal, tengah, atau akhir
+                cmd.Parameters.AddWithValue("@cari", "%" + txtCari.Text + "%");
+
+                SqlDataReader dr = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+                dgvBarang.DataSource = dt;
+                conn.Close();
             }
-     } }
+            catch (Exception ex)
+            {
+                if (conn.State == ConnectionState.Open) conn.Close();
+                // Opsional: tampilkan pesan error jika diperlukan
+            }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+
 
 
 
