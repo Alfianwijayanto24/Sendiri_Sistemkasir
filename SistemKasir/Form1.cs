@@ -196,4 +196,50 @@ namespace SistemKasir
                 }
             }
         }
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            // Kosongkan semua TextBox
+            txtKode.Clear();
+            txtNama.Clear();
+            txtHargaBeli.Clear();
+            txtHargaJual.Clear();
+            txtStok.Clear();
+            txtSatuan.Clear();
+
+            // Jalankan fungsi tampil data & hitung total lagi
+            TampilkanData();
+            HitungTotal();
+
+            MessageBox.Show("Data telah disegarkan.", "Refresh");
+        }
+        private void txtCari_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                conn.Open();
+                // Query untuk mencari data berdasarkan NamaBarang
+                string query = "SELECT * FROM Barang WHERE NamaBarang LIKE @cari";
+                SqlCommand cmd = new SqlCommand(query, conn);
+            }
+     } }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
