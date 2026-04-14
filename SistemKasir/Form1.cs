@@ -89,6 +89,35 @@ namespace SistemKasir
                 MessageBox.Show("Kode dan Nama tidak boleh kosong!", "Validasi");
                 return;
             }
+
+            try
+            {
+                conn.Open();
+                // PERBAIKAN: Menyebutkan kolom secara spesifik karena ID otomatis
+                string query = "INSERT INTO Barang (KodeBarang, NamaBarang, HargaBeli, HargaJual, Stok, Satuan) " +
+                               "VALUES (@kode, @nama, @beli, @jual, @stok, @satuan)";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@kode", txtKode.Text);
+                cmd.Parameters.AddWithValue("@nama", txtNama.Text);
+                cmd.Parameters.AddWithValue("@beli", decimal.Parse(txtHargaBeli.Text));
+                cmd.Parameters.AddWithValue("@jual", decimal.Parse(txtHargaJual.Text));
+                cmd.Parameters.AddWithValue("@stok", int.Parse(txtStok.Text));
+                cmd.Parameters.AddWithValue("@satuan", txtSatuan.Text);
+
+                cmd.ExecuteNonQuery();
+                conn.Close();
+
+                MessageBox.Show("Data Berhasil Disimpan", "Sukses");
+                TampilkanData();
+                HitungTotal();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal Simpan: " + ex.Message);
+                if (conn.State == ConnectionState.Open) conn.Close();
+            }
         }
+
     }
 }
