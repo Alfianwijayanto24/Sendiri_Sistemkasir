@@ -132,13 +132,37 @@ namespace SistemKasir
                 txtSatuan.Text = row.Cells[6].Value.ToString();
             }
         }
+
+        // BAGIAN F: Konfirmasi sebelum Hapus
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (txtKode.Text == "") return;
+
+            DialogResult dialog = MessageBox.Show("Yakin ingin menghapus barang " + txtNama.Text + "?",
+                                                "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialog == DialogResult.Yes)
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Barang WHERE KodeBarang = @kode", conn);
+                    cmd.Parameters.AddWithValue("@kode", txtKode.Text);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+
+                    TampilkanData();
+                    HitungTotal();
+                    MessageBox.Show("Data terhapus!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                }
+            }
+        }
     }
 }
-
-
-
-
-
 
 
 
