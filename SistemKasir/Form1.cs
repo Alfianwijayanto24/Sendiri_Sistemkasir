@@ -118,6 +118,30 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
             }
         }
-
+        // BAGIAN E: Pilih data dari Grid ke TextBox
+        private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvBarang.Rows[e.RowIndex];
+                txtKode.Text = row.Cells[1].Value.ToString(); // Index 1 = KodeBarang
+                txtNama.Text = row.Cells[2].Value.ToString(); // Index 2 = NamaBarang
+                txtHargaBeli.Text = row.Cells[3].Value.ToString();
+                txtHargaJual.Text = row.Cells[4].Value.ToString();
+                txtStok.Text = row.Cells[5].Value.ToString();
+                txtSatuan.Text = row.Cells[6].Value.ToString();
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
