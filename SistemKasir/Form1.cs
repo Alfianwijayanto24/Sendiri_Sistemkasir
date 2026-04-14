@@ -166,7 +166,34 @@ namespace SistemKasir
             // Bagian F: Konfirmasi sebelum diubah
             DialogResult dialog = MessageBox.Show("Apakah Anda yakin ingin mengubah data " + txtNama.Text + "?",
                                                  "Konfirmasi Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialog == DialogResult.Yes)
+            {
+                try
+                {
+                    conn.Open();
+                    // Query UPDATE berdasarkan KodeBarang
+                    string query = "UPDATE Barang SET NamaBarang=@nama, HargaBeli=@beli, HargaJual=@jual, Stok=@stok, Satuan=@satuan WHERE KodeBarang=@kode";
+
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@kode", txtKode.Text);
+                    cmd.Parameters.AddWithValue("@nama", txtNama.Text);
+                    cmd.Parameters.AddWithValue("@beli", decimal.Parse(txtHargaBeli.Text));
+                    cmd.Parameters.AddWithValue("@jual", decimal.Parse(txtHargaJual.Text));
+                    cmd.Parameters.AddWithValue("@stok", int.Parse(txtStok.Text));
+                    cmd.Parameters.AddWithValue("@satuan", txtSatuan.Text);
+
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+
+                    MessageBox.Show("Data Berhasil Diperbarui!", "Sukses");
+                    TampilkanData(); // Refresh Grid
+                    HitungTotal();   // Update Label
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gagal Update: " + ex.Message);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                }
+            }
         }
-    }
-}
 
