@@ -42,5 +42,31 @@ namespace SistemKasir
                 MessageBox.Show("Koneksi Gagal: " + ex.Message);
             }
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        // BAGIAN E: Tampilkan Data menggunakan SqlDataReader
+        private void TampilkanData()
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Barang", conn);
+                SqlDataReader dr = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+                dgvBarang.DataSource = dt;
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal Tampil: " + ex.Message);
+                if (conn.State == ConnectionState.Open) conn.Close();
+            }
+        }
+
     }
 }
