@@ -161,11 +161,12 @@ namespace SistemKasir
                 }
             }
         }
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            // Bagian F: Konfirmasi sebelum diubah
+            DialogResult dialog = MessageBox.Show("Apakah Anda yakin ingin mengubah data " + txtNama.Text + "?",
+                                                 "Konfirmasi Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
     }
 }
-
-
-
-
-
 
