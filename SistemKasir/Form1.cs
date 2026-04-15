@@ -47,18 +47,20 @@ namespace SistemKasir
         {
 
         }
-
-        // BAGIAN E: Tampilkan Data menggunakan SqlDataReader
+        // Pastikan fungsi ini ada di dalam class Form1 : Form
         private void TampilkanData()
         {
             try
             {
+                if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
+
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Barang", conn);
                 SqlDataReader dr = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
                 dt.Load(dr);
                 dgvBarang.DataSource = dt;
+
                 conn.Close();
             }
             catch (Exception ex)
@@ -66,6 +68,14 @@ namespace SistemKasir
                 MessageBox.Show("Gagal Tampil: " + ex.Message);
                 if (conn.State == ConnectionState.Open) conn.Close();
             }
+        }
+
+        // Tambahkan Event Handler untuk Tombol
+        private void btnTampilkan_Click(object sender, EventArgs e)
+        {
+            TampilkanData();
+            HitungTotal();
+            MessageBox.Show("Data berhasil diperbarui.", "Informasi");
         }
         // BAGIAN D: ExecuteScalar untuk Hitung Total Record
         private void HitungTotal()
@@ -212,6 +222,7 @@ namespace SistemKasir
 
             MessageBox.Show("Data telah disegarkan.", "Refresh");
         }
+       
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             try

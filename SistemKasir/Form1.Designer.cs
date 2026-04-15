@@ -49,6 +49,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblTotalRecord = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,6 +105,7 @@
             this.dgvBarang.RowTemplate.Height = 28;
             this.dgvBarang.Size = new System.Drawing.Size(1045, 347);
             this.dgvBarang.TabIndex = 5;
+            this.dgvBarang.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             // 
             // label3
             // 
@@ -135,7 +137,7 @@
             // 
             this.button3.Location = new System.Drawing.Point(108, 235);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(108, 27);
+            this.button3.Size = new System.Drawing.Size(108, 33);
             this.button3.TabIndex = 9;
             this.button3.Text = "btnHapus";
             this.button3.UseVisualStyleBackColor = true;
@@ -145,7 +147,7 @@
             // 
             this.button4.Location = new System.Drawing.Point(108, 274);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(108, 25);
+            this.button4.Size = new System.Drawing.Size(108, 34);
             this.button4.TabIndex = 10;
             this.button4.Text = "btnRefresh";
             this.button4.UseVisualStyleBackColor = true;
@@ -236,11 +238,22 @@
             this.lblTotalRecord.TabIndex = 20;
             this.lblTotalRecord.Text = "lblTotalRecord";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(13, 306);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(168, 32);
+            this.button5.TabIndex = 21;
+            this.button5.Text = "TampilkanData\r\n\r\n\r\n\r\n";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.btnTampilkan_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1397, 450);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblTotalRecord);
             this.Controls.Add(this.label4);
@@ -294,6 +307,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblTotalRecord;
+        private System.Windows.Forms.Button button5;
     }
 }
 
