@@ -102,7 +102,7 @@
             this.dgvBarang.Name = "dgvBarang";
             this.dgvBarang.RowHeadersWidth = 62;
             this.dgvBarang.RowTemplate.Height = 28;
-            this.dgvBarang.Size = new System.Drawing.Size(438, 347);
+            this.dgvBarang.Size = new System.Drawing.Size(1045, 347);
             this.dgvBarang.TabIndex = 5;
             // 
             // label3
@@ -240,7 +240,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1397, 450);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblTotalRecord);
             this.Controls.Add(this.label4);
