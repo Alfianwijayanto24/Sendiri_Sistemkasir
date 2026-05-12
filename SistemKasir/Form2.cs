@@ -280,10 +280,8 @@ namespace SistemKasir
 
                 try
                 {
-                    string queryTransaksi = @"
-                        INSERT INTO Transaksi (TanggalTransaksi, TotalPenjualan, Bayar, Kembali)
-                        VALUES (@Tanggal, @Total, @Bayar, @Kembali);
-                        SELECT SCOPE_IDENTITY();";
+                    string queryTransaksi =
+                        "EXEC sp_tambah_transaksi @Tanggal, @Total, @Bayar, @Kembali";
 
                     SqlCommand cmdTrx = new SqlCommand(queryTransaksi, conn, trx);
                     cmdTrx.Parameters.AddWithValue("@Tanggal", DateTime.Now);
