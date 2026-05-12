@@ -155,6 +155,7 @@ namespace SistemKasir
         // =========================
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+
             if (txtKode.Text == "") { MessageBox.Show("Pilih data terlebih dahulu!"); return; }
 
             DialogResult dialog = MessageBox.Show(
