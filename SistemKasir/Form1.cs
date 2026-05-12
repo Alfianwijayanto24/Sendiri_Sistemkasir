@@ -125,6 +125,7 @@ namespace SistemKasir
                         conn
                     );
 
+
                 cmd.CommandType =
                     CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@kode", txtKode.Text);
