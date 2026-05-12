@@ -98,8 +98,14 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
 
-                string query = "SELECT * FROM Barang WHERE KodeBarang = @kode";
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_search_barang_kode",
+                        conn
+                    );
+
+                cmd.CommandType =
+                    CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@kode", txtKode.Text.Trim());
 
                 SqlDataReader dr = cmd.ExecuteReader();
