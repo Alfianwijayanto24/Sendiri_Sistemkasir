@@ -12,11 +12,14 @@ namespace SistemKasir
 
         SqlConnection conn = new SqlConnection(connectionString);
 
+        BindingSource bs = new BindingSource();
+
         public Form2()
         {
             InitializeComponent();
             InitDGV();
             lblTotal.Text = "Total : Rp 0";
+            bindingNavigator1.BindingSource = bs;
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e) { }
