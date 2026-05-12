@@ -60,7 +60,8 @@ namespace SistemKasir
                 SqlDataReader dr = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
                 dt.Load(dr);
-                dgvBarang.DataSource = dt;
+                bs.DataSource = dt;
+                dgvBarang.DataSource = bs;
 
                 conn.Close();
             }
