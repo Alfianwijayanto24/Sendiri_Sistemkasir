@@ -13,6 +13,8 @@ namespace SistemKasir
 
         SqlConnection conn = new SqlConnection(connectionString);
 
+        BindingSource bs = new BindingSource();
+
         public Form1()
         {
             InitializeComponent();
@@ -33,6 +35,8 @@ namespace SistemKasir
                 // OTOMATIS TAMPILKAN DATA SAAT FORM DIBUKA
                 TampilkanData();
                 HitungTotal();
+
+                bindingNavigator1.BindingSource = bs;
             }
             catch (Exception ex)
             {
@@ -52,7 +56,7 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Barang", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM vw_Barang", conn);
                 SqlDataReader dr = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
                 dt.Load(dr);
