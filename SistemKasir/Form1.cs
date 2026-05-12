@@ -286,7 +286,7 @@ namespace SistemKasir
 
                 cmd.CommandType =
                     CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@cari", "%" + txtCari.Text + "%");
+                cmd.Parameters.AddWithValue("@keyword", txtCari.Text);
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
