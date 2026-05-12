@@ -278,8 +278,14 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT * FROM Barang WHERE NamaBarang LIKE @cari", conn);
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_search_barang",
+                        conn
+                    );
+
+                cmd.CommandType =
+                    CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@cari", "%" + txtCari.Text + "%");
 
                 SqlDataReader dr = cmd.ExecuteReader();
