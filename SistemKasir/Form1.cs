@@ -216,8 +216,14 @@ namespace SistemKasir
                     if (conn.State == ConnectionState.Open) conn.Close();
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand(
-                        "DELETE FROM Barang WHERE KodeBarang=@kode", conn);
+                    SqlCommand cmd =
+                        new SqlCommand(
+                            "sp_hapus_barang",
+                            conn
+                        );
+
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@kode", txtKode.Text);
                     cmd.ExecuteNonQuery();
                     conn.Close();
