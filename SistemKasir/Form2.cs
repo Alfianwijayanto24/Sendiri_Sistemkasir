@@ -47,7 +47,7 @@ namespace SistemKasir
                 NamaBarang,
                 HargaJual,
                 Stok
-            FROM Barang
+            FROM vw_Barang
             WHERE NamaBarang LIKE @keyword
                OR KodeBarang LIKE @keyword";
 
@@ -60,7 +60,8 @@ namespace SistemKasir
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                dgvBarang.DataSource = dt;
+                bs.DataSource = dt;
+                dgvBarang.DataSource = bs;
 
                 dgvBarang.AutoSizeColumnsMode =
                     DataGridViewAutoSizeColumnsMode.Fill;
