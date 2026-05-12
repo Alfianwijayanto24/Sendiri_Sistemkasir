@@ -119,11 +119,14 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
 
-                string query =
-                    "INSERT INTO Barang (KodeBarang, NamaBarang, HargaBeli, HargaJual, Stok, Satuan) " +
-                    "VALUES (@kode, @nama, @beli, @jual, @stok, @satuan)";
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_tambah_barang",
+                        conn
+                    );
 
-                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.CommandType =
+                    CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@kode", txtKode.Text);
                 cmd.Parameters.AddWithValue("@nama", txtNama.Text);
                 cmd.Parameters.AddWithValue("@beli", decimal.Parse(txtHargaBeli.Text));
