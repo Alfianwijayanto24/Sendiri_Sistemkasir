@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SistemKasir
 {
     public partial class Form1 : Form
     {
-        // 1. Pastikan Server Name sesuai dengan punya kamu
-        static string connectionString = "Server=ALFIANN\\ALFIANWIJAYANTO;Database=SistemKasirWarung;Integrated Security=True;";
+        static string connectionString =
+            "Server=ALFIANN\\ALFIANWIJAYANTO;Database=SistemKasirWarung;Integrated Security=True;";
+
         SqlConnection conn = new SqlConnection(connectionString);
 
         public Form1()
@@ -22,32 +18,33 @@ namespace SistemKasir
             InitializeComponent();
         }
 
-        // BAGIAN B: Koneksi Database saat Form Load
+        // =========================
+        // FORM DIBUKA → LANGSUNG TAMPIL DATA OTOMATIS
+        // =========================
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
                 conn.Open();
-                lblStatus.Text = "Status: Terhubung";
+                lblStatus.Text = "Status: Terhubung ✔";
                 lblStatus.ForeColor = Color.Green;
                 conn.Close();
 
+                // OTOMATIS TAMPILKAN DATA SAAT FORM DIBUKA
                 TampilkanData();
                 HitungTotal();
             }
             catch (Exception ex)
             {
-                lblStatus.Text = "Status: Putus";
+                lblStatus.Text = "Status: Putus ✘";
                 lblStatus.ForeColor = Color.Red;
                 MessageBox.Show("Koneksi Gagal: " + ex.Message);
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-        // Pastikan fungsi ini ada di dalam class Form1 : Form
+        // =========================
+        // TAMPILKAN DATA BARANG
+        // =========================
         private void TampilkanData()
         {
             try
@@ -70,28 +67,40 @@ namespace SistemKasir
             }
         }
 
-        // Tambahkan Event Handler untuk Tombol
-        private void btnTampilkan_Click(object sender, EventArgs e)
-        {
-            TampilkanData();
-            HitungTotal();
-            MessageBox.Show("Data berhasil diperbarui.", "Informasi");
-        }
-        // BAGIAN D: ExecuteScalar untuk Hitung Total Record
+        // =========================
+        // HITUNG TOTAL RECORD
+        // =========================
         private void HitungTotal()
         {
             try
             {
+                if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
+
                 SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Barang", conn);
                 int jumlah = (int)cmd.ExecuteScalar();
-                lblTotalRecord.Text = "Total Record: " + jumlah.ToString();
+                lblTotalRecord.Text = "Total Record: " + jumlah;
+
                 conn.Close();
             }
-            catch { if (conn.State == ConnectionState.Open) conn.Close(); }
+            catch
+            {
+                if (conn.State == ConnectionState.Open) conn.Close();
+            }
         }
 
+        // =========================
+        // TOMBOL TAMPILKAN / REFRESH
+        // =========================
+        private void btnTampilkan_Click(object sender, EventArgs e)
+        {
+            TampilkanData();
+            HitungTotal();
+        }
 
+        // =========================
+        // SIMPAN BARANG BARU
+        // =========================
         private void btnSimpan_Click(object sender, EventArgs e)
         {
             if (txtKode.Text == "" || txtNama.Text == "")
@@ -102,10 +111,12 @@ namespace SistemKasir
 
             try
             {
+                if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
-                // PERBAIKAN: Menyebutkan kolom secara spesifik karena ID otomatis
-                string query = "INSERT INTO Barang (KodeBarang, NamaBarang, HargaBeli, HargaJual, Stok, Satuan) " +
-                               "VALUES (@kode, @nama, @beli, @jual, @stok, @satuan)";
+
+                string query =
+                    "INSERT INTO Barang (KodeBarang, NamaBarang, HargaBeli, HargaJual, Stok, Satuan) " +
+                    "VALUES (@kode, @nama, @beli, @jual, @stok, @satuan)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@kode", txtKode.Text);
@@ -118,7 +129,8 @@ namespace SistemKasir
                 cmd.ExecuteNonQuery();
                 conn.Close();
 
-                MessageBox.Show("Data Berhasil Disimpan", "Sukses");
+                MessageBox.Show("Data Berhasil Disimpan!", "Sukses");
+                BersihkanInput();
                 TampilkanData();
                 HitungTotal();
             }
@@ -128,61 +140,28 @@ namespace SistemKasir
                 if (conn.State == ConnectionState.Open) conn.Close();
             }
         }
-        // BAGIAN E: Pilih data dari Grid ke TextBox
-        private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvBarang.Rows[e.RowIndex];
-                txtKode.Text = row.Cells[1].Value.ToString(); // Index 1 = KodeBarang
-                txtNama.Text = row.Cells[2].Value.ToString(); // Index 2 = NamaBarang
-                txtHargaBeli.Text = row.Cells[3].Value.ToString();
-                txtHargaJual.Text = row.Cells[4].Value.ToString();
-                txtStok.Text = row.Cells[5].Value.ToString();
-                txtSatuan.Text = row.Cells[6].Value.ToString();
-            }
-        }
 
-        // BAGIAN F: Konfirmasi sebelum Hapus
-        private void btnHapus_Click(object sender, EventArgs e)
-        {
-            if (txtKode.Text == "") return;
-
-            DialogResult dialog = MessageBox.Show("Yakin ingin menghapus barang " + txtNama.Text + "?",
-                                                "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dialog == DialogResult.Yes)
-            {
-                try
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand("DELETE FROM Barang WHERE KodeBarang = @kode", conn);
-                    cmd.Parameters.AddWithValue("@kode", txtKode.Text);
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-
-                    TampilkanData();
-                    HitungTotal();
-                    MessageBox.Show("Data terhapus!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    if (conn.State == ConnectionState.Open) conn.Close();
-                }
-            }
-        }
+        // =========================
+        // UPDATE BARANG
+        // =========================
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            // Bagian F: Konfirmasi sebelum diubah
-            DialogResult dialog = MessageBox.Show("Apakah Anda yakin ingin mengubah data " + txtNama.Text + "?",
-                                                 "Konfirmasi Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (txtKode.Text == "") { MessageBox.Show("Pilih data terlebih dahulu!"); return; }
+
+            DialogResult dialog = MessageBox.Show(
+                "Yakin ingin mengubah data " + txtNama.Text + "?",
+                "Konfirmasi Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (dialog == DialogResult.Yes)
             {
                 try
                 {
+                    if (conn.State == ConnectionState.Open) conn.Close();
                     conn.Open();
-                    // Query UPDATE berdasarkan KodeBarang
-                    string query = "UPDATE Barang SET NamaBarang=@nama, HargaBeli=@beli, HargaJual=@jual, Stok=@stok, Satuan=@satuan WHERE KodeBarang=@kode";
+
+                    string query =
+                        "UPDATE Barang SET NamaBarang=@nama, HargaBeli=@beli, " +
+                        "HargaJual=@jual, Stok=@stok, Satuan=@satuan WHERE KodeBarang=@kode";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@kode", txtKode.Text);
@@ -196,8 +175,9 @@ namespace SistemKasir
                     conn.Close();
 
                     MessageBox.Show("Data Berhasil Diperbarui!", "Sukses");
-                    TampilkanData(); // Refresh Grid
-                    HitungTotal();   // Update Label
+                    BersihkanInput();
+                    TampilkanData();
+                    HitungTotal();
                 }
                 catch (Exception ex)
                 {
@@ -206,74 +186,132 @@ namespace SistemKasir
                 }
             }
         }
+
+        // =========================
+        // HAPUS BARANG
+        // =========================
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (txtKode.Text == "") { MessageBox.Show("Pilih data terlebih dahulu!"); return; }
+
+            DialogResult dialog = MessageBox.Show(
+                "Yakin ingin menghapus barang " + txtNama.Text + "?",
+                "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dialog == DialogResult.Yes)
+            {
+                try
+                {
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(
+                        "DELETE FROM Barang WHERE KodeBarang=@kode", conn);
+                    cmd.Parameters.AddWithValue("@kode", txtKode.Text);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+
+                    MessageBox.Show("Data Berhasil Dihapus!");
+                    BersihkanInput();
+                    TampilkanData();
+                    HitungTotal();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                }
+            }
+        }
+
+        // =========================
+        // REFRESH
+        // =========================
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            // Kosongkan semua TextBox
-            txtKode.Clear();
-            txtNama.Clear();
-            txtHargaBeli.Clear();
-            txtHargaJual.Clear();
-            txtStok.Clear();
-            txtSatuan.Clear();
-
-            // Jalankan fungsi tampil data & hitung total lagi
+            BersihkanInput();
             TampilkanData();
             HitungTotal();
-
-            MessageBox.Show("Data telah disegarkan.", "Refresh");
         }
-       
+
+        // =========================
+        // KLIK BARIS DI GRID → ISI TEXTBOX
+        // =========================
+        private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvBarang.Rows[e.RowIndex];
+                txtKode.Text = row.Cells[1].Value.ToString();
+                txtNama.Text = row.Cells[2].Value.ToString();
+                txtHargaBeli.Text = row.Cells[3].Value.ToString();
+                txtHargaJual.Text = row.Cells[4].Value.ToString();
+                txtStok.Text = row.Cells[5].Value.ToString();
+                txtSatuan.Text = row.Cells[6].Value.ToString();
+            }
+        }
+
+        // =========================
+        // CARI BARANG OTOMATIS
+        // =========================
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             try
             {
+                if (conn.State == ConnectionState.Open) conn.Close();
                 conn.Open();
-                // Query untuk mencari data berdasarkan NamaBarang
-                string query = "SELECT * FROM Barang WHERE NamaBarang LIKE @cari";
-                SqlCommand cmd = new SqlCommand(query, conn);
 
-                // Menambahkan simbol % agar mencari karakter di awal, tengah, atau akhir
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM Barang WHERE NamaBarang LIKE @cari", conn);
                 cmd.Parameters.AddWithValue("@cari", "%" + txtCari.Text + "%");
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
                 dt.Load(dr);
                 dgvBarang.DataSource = dt;
+
                 conn.Close();
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 if (conn.State == ConnectionState.Open) conn.Close();
-                // Opsional: tampilkan pesan error jika diperlukan
             }
         }
 
-        private void label7_Click(object sender, EventArgs e)
+        // =========================
+        // TOMBOL BUKA KASIR → PINDAH KE FORM2
+        // =========================
+        private void btnKasir_Click(object sender, EventArgs e)
         {
+            Form2 kasir = new Form2();
+            kasir.Show();       // Form2 terbuka
+            this.Hide();        // Form1 disembunyikan (bukan ditutup)
 
+            // Saat Form2 ditutup → Form1 muncul lagi
+            kasir.FormClosed += (s, args) =>
+            {
+                this.Show();
+                TampilkanData();
+                HitungTotal();
+            };
         }
+
+        // =========================
+        // BERSIHKAN INPUT
+        // =========================
+        private void BersihkanInput()
+        {
+            txtKode.Clear();
+            txtNama.Clear();
+            txtHargaBeli.Clear();
+            txtHargaJual.Clear();
+            txtStok.Clear();
+            txtSatuan.Clear();
+        }
+
+        // Event handler kosong (tidak dihapus agar Designer tidak error)
+        private void label1_Click(object sender, EventArgs e) { }
+        private void label7_Click(object sender, EventArgs e) { }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
