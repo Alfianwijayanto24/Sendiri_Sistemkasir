@@ -582,7 +582,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SistemKasir_Setup"
         "ProductCode" = "8:{3229EAFA-238B-484F-BB5F-310A2A4FCE46}"
-        "PackageCode" = "8:{6564C977-5468-418A-BB96-F1B4FD0B1457}"
+        "PackageCode" = "8:{D8306444-DE4B-4575-8AE8-54E2F346501A}"
         "UpgradeCode" = "8:{49B1A05F-6A6F-40ED-B6FF-8011F4A54C68}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
